@@ -21,7 +21,7 @@ var $j = jQuery.noConflict();
 
 var ccv_config = {
   "pageWidth" : 1280, // Global width of the page in pixels
-  
+
   // Text replacements to improve the display of data
   // You can add your own custom replacements here
   "replacements" : [
@@ -42,11 +42,24 @@ var ccv_config = {
     ["Maîtrise avec mémoire", "M.Sc. mémoire"],
     ["Maîtrise sans mémoire", "M.Sc. stage"],
     ["Université du Québec à Chicoutimi", "UQAC"],
-    
   ],
-  
+
   // Parameters for the "conference papers" page
   "conferencePapers" : {
+    // Width of each column in pixels
+    "columns" : [
+      { "width" : 40,  "showHeader" : true }, //
+      { "width" : 40,  "showHeader" : true }, //
+      { "width" : 40,  "showHeader" : true }, //
+      { "width" : 400, "showHeader" : true },
+      { "width" : 60,  "showHeader" : true }, //
+      { "width" : 400, "showHeader" : true },
+      { "width" : 100, "showHeader" : true },
+      { "width" : 100, "showHeader" : true }
+    ]
+  },
+  // Parameters for the "Journal Articles" page
+  "journalArticles" : {
     // Width of each column in pixels
     "columns" : [
       { "width" : 40,  "showHeader" : false },
@@ -105,6 +118,8 @@ var replace_text = function(s) {
 
 if ($j("#table").length !== 0 // Main page
     || $j("#tableConferencePublications").length !== 0 // Publications page
+    || $j("#tableJournalArticles").length !== 0 // Journal Articles
+    || $j("#tableBookChapters").length !== 0 // Book Chapters
     || $j("table[id*='tableStudent/PostdoctoralSupervision']").length !== 0 // Students
     || $j("#tableConferenceReviewActivities").length !== 0
 ) { // OK, we are in a page where we should do something
@@ -171,9 +186,67 @@ $j("#tableConferencePublications thead th").each(function(index, el) {
 });
 $j("#tableConferencePublications tbody tr").each(function(i, el) {
   $j(this).children("td").each(function(index, e) {
-    $j(this).width(ccv_config.conferencePapers.columns[index].width);  
+    $j(this).width(ccv_config.conferencePapers.columns[index].width);
   })
 });
+
+// -----------------------------
+// Journal Articles (jri)
+// -----------------------------
+
+// Force the table to listen to our dimensions
+$j("#tableJournalArticles").css(
+  {
+    "table-layout" : "fixed",
+    "width" : ccv_config.pageWidth
+  }
+);
+
+// Re-enable word-wrapping for table cells
+$j("#tableJournalArticles th").add(
+  "#tableJournalArticles th a").add(
+  "#tableJournalArticles td").css(
+  {
+    "word-wrap" : "break-word",
+    "white-space" : "normal"
+  }
+);
+
+// Manually force the width of each table cell according to config
+/* $j("#tableJournalArticles thead th").each(function(index, el) {
+  $j(this).width(ccv_config.journalArticles.columns[index].width);
+  if (ccv_config.journalArticles.columns[index].showHeader === false) {
+    $j(this).children("a").css({"display" : "none"});
+  }
+});
+$j("#tableJournalArticles tbody tr").each(function(i, el) {
+  $j(this).children("td").each(function(index, e) {
+    $j(this).width(ccv_config.journalArticles.columns[index].width);
+  })
+});
+ */
+
+// -----------------------------
+// Book Chapters  (jri)
+// -----------------------------
+
+// Force the table to listen to our dimensions
+$j("#tableBookChapters").css(
+  {
+    "table-layout" : "fixed",
+    "width" : ccv_config.pageWidth
+  }
+);
+
+// Re-enable word-wrapping for table cells
+$j("#tableBookChapters th").add(
+  "#tableBookChapters th a").add(
+  "#tableBookChapters td").css(
+  {
+    "word-wrap" : "break-word",
+    "white-space" : "normal"
+  }
+);
 
 // -----------------------------
 // Students supervised
@@ -197,6 +270,7 @@ $j("table[id*='tableStudent/PostdoctoralSupervision'] th").add(
   }
 );
 
+    /*
 // Manually force the width of each table cell according to config
 $j("table[id*='tableStudent/PostdoctoralSupervision'] thead th").each(function(index, el) {
   $j(this).width(ccv_config.students.columns[index].width);
@@ -206,11 +280,12 @@ $j("table[id*='tableStudent/PostdoctoralSupervision'] thead th").each(function(i
 });
 $j("table[id*='tableStudent/PostdoctoralSupervision'] tbody tr").each(function(i, el) {
   $j(this).children("td").each(function(index, e) {
-    $j(this).width(ccv_config.students.columns[index].width);  
+    $j(this).width(ccv_config.students.columns[index].width);
     var span = $j(this).children("span");
     span.html(replace_text(span.text()));
   })
 });
+    */
 
 // -----------------------------
 // Conference reviews
@@ -243,8 +318,8 @@ $j("#tableConferenceReviewActivities thead th").each(function(index, el) {
 });
 $j("#tableConferenceReviewActivities tbody tr").each(function(i, el) {
   $j(this).children("td").each(function(index, e) {
-    $j(this).width(ccv_config.conferenceReviews.columns[index].width);  
+    $j(this).width(ccv_config.conferenceReviews.columns[index].width);
   })
 });
-  
+
 };
